@@ -2,17 +2,17 @@ from paver.easy import *
 from paver.setuputils import setup, find_packages
 
 setup(
-    name='pinsor',
-    version='0.6.0',
-    description='IoC container',
+    name='cassandra-bench',
+    version='0.1.0',
+    description='benchmarking program created for cassandra',
     author='Ryan Svihla',
     author_email='rssvihla@gmail.com',
-    url='http://code.google.com/p/pinsor',
-    download_url='http://code.google.com/p/pinsor/downloads/list',
+    url='http://github.com/rssvihla/cassandra-bench',
+    download_url='http://github.com/rssvihla/cassandra-bench/downloads',
     packages=find_packages(),
     
     long_description="""\
-        pinsor is an IoC container with an emphasis on dependency resolution""",
+        """,
     classifiers=[
         "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python",
@@ -21,7 +21,7 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Operating System :: OS Independent"
     ],
-    keywords = "ioc, dependency injection",
+    keywords = "benchmarking, cassandra",
     license="Apache License 2.0",
     install_requires=[
     'setuptools'
