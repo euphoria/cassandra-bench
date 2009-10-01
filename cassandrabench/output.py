@@ -3,7 +3,39 @@ Created on Sep 22, 2009
 
 @author: rsvihla
 '''
+import types
+import reports as r
 
+def _getproperties(o):
+    props = [(prop, getattr(o,prop)) for prop in dir(o) if not isinstance(getattr(o,prop), types.MethodType) and not prop.startswith('_')]
+    return props
+
+def _detailoutput(details):
+    print "--------------------"
+    print "name | records | time | persec"
+    for det in details:
+        record = "%s | %s | %s | %s" % (det.name ,str(det.records) , str(det.time) , str(det.persec))
+        print record
+    print "--------------------"
+       
+def consoleout(reportdata):
+    print "benchmarking complete"
+    print "summary below"
+    print "--------------------"
+    props = _getproperties(reportdata)
+    for p in props:
+        if not p[0] == "written" and not p[0] == "read":
+            print str(p[0]) + ":"+ str(p[1])
+    print "--------------------"
+    print "details below"
+    written = [p[1] for p in props if p[0] == "written"][0]
+    read = [p[1] for p in props if p[0] == "read"][0]   
+    print "written details"
+    _detailoutput(written)
+    print "read details"
+    _detailoutput(read)
+            
+            
 class BaseOutPut(object):
     '''
     classdocs
@@ -47,6 +79,8 @@ class Html(BaseOutPut):
         for w in self.report.read:
             html.append( "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % (w.name, w.records, w.time, w.persec))
         html.append("</table>")
+        html.append("</body>")
+        html.append("</html>")
         return '\n'.join(html)
         
     def _writemeasure(self, measure, data):
@@ -54,3 +88,8 @@ class Html(BaseOutPut):
     
 class Xml(BaseOutPut):
     pass
+
+
+
+
+

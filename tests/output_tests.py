@@ -11,7 +11,15 @@ def _contextsetup(details):
     details.append(("writing", 1100, 1))
     details.append(("reading", 600, 2))
     return r.Reports(details)
-
+    
+    
+class TestPropertyInspection(unittest.TestCase):
+    
+    def test_should_output_report(self):
+        report = _contextsetup([])
+        print dir(report)
+        o._getproperties(report)
+        
 class TestHtmlOutput(unittest.TestCase):
 
     def _assertContains(self, compare, num):

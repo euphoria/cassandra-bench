@@ -1,5 +1,6 @@
 from paver.easy import *
 from paver.setuputils import setup, find_packages
+from pylint import lint as linter 
 
 setup(
     name='cassandra-bench',
@@ -32,4 +33,8 @@ setup(
 
 @task
 def test():
-    sh('nosetests tests')
+    sh('nosetests tests/ --with-xunit --xunit-file buildreports/nose-report.xml')
+    
+@task
+def lint():
+   sh('pylint cassandrabench -f html >> buildreports/lint.html')
