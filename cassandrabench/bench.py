@@ -15,8 +15,10 @@ from random import randint, gauss
 from hashlib import md5
 import time
 
+
+keybase = 1
 #need to make this configurable. Jonathan's default was 1000**2
-TOTAL_KEYS = 10**2
+TOTAL_KEYS = keybase**2
 
 COLUMNS_PER_KEY = 5
 
@@ -56,11 +58,11 @@ class Inserter(Thread):
         data = md5(str(get_ident())).hexdigest()
         columns = [Column(chr(ord('A') + j), data, 0) for j in xrange(COLUMNS_PER_KEY)]
         self.count = 0
+        cfmap = {'Standard1': [ColumnOrSuperColumn(column=c) for c in columns]}
         starttime = time.time()
         for i in self.range:
             key = str(i)
-            cfmap = {'Standard1': [ColumnOrSuperColumn(column=c) for c in columns]}
-            client.batch_insert('Keyspace1', key, cfmap, ConsistencyLevel.ONE)
+            client.batch_insert('Keyspace1', key, cfmap, ConsistencyLevel.ONE)  
             self.count += 1
         endtime = time.time()
         timeelapsed = endtime - starttime
@@ -118,15 +120,22 @@ def benchme(threadcount,server):
     
     
 
-def run(server, threads, reporttype, outputname):
-    details = benchme(threads,server)
-    report= r.Reports(details)
-    o.consoleout(report)
+def run(hosts, threads, savehtml, outputname):
+    reports = []
+    for host in hosts:
+        hostdetail = benchme(threads,host)
+        report= r.Reports(hostdetail)
+        report.host = host
+        reports.append(report)
+    o.consoleout(reports)
+    if savehtml:
+        html = o.Html()
+        f=open(outputname,"w")
+        f.write(html.output(reports))
+        f.close()
+        
     #print filter(lambda x:x == reporttype, dir(o))[0]
 
 # .__init__().save(outputname)
 
-if __name__ == '__main__':
-    filetype = "Html"
-    filename = "output.html"
-    run(50,filetype, filename)
+ 

@@ -1,3 +1,4 @@
 *.pyc
 buildreports/*
 .DS_Store
+report.html

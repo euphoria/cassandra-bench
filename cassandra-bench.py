@@ -8,11 +8,11 @@ Copyright (c) 2009 __MyCompanyName__. All rights reserved.
 """
 
 import sys
-import getopt
+import getopt 
 import cassandrabench.bench as b
 
 help_message = '''
-usage: cassandra-bench.py -s="server" -t="thread count" -r="html"|"xml" -o="File Location"
+usage: cassandra-bench.py -s="server (separated by semicolon ex: 127.0.0.1:9160;212.229.1.21:9160)" -t="thread count" --keybase="base key count" -o="File Location"
 '''
 
 
@@ -26,13 +26,14 @@ def main(argv=None):
         argv = sys.argv
     try:
         try:
-            opts, args = getopt.getopt(argv[1:], "ho:v", ["help", "server=","threads=","report=","output="])
+            opts, args = getopt.getopt(argv[1:], "hstko:v", ["help", "server=","threads=","keybase=","output="])
         except getopt.error, msg:
             raise Usage(msg)
         
         threads = 50
-        reporttype = ""
         output = ""
+        savereport = False 
+        keybase = 1
         server ="127.0.0.1:9160"
         # option processing
         for option, value in opts:
@@ -44,11 +45,15 @@ def main(argv=None):
                 raise Usage(help_message)
             if option in ("-o", "--output"):
                 output = value
-            if option in ("-r", "--report"):
-                reporttype = value
+                savereport  = True 
+            if option in ("-k", "--keybase"):
+                keybase = value
             if option in ("-t", "--threads"):
                 threads = int(value)
-        b.run(server, threads, reporttype, output)
+        b.keybase = keybase
+        serverlist = server.split(";")
+        b.run(serverlist, threads, savereport, output)
+        
         
     except Usage, err:
         print >> sys.stderr, sys.argv[0].split("/")[-1] + ": " + str(err.msg)
