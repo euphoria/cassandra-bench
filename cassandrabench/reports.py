@@ -39,6 +39,8 @@ class ReportDetail(object):
         
     @property
     def persec(self):
+        if self.tple[2] == 0.0:
+            return float('NaN')
         return self.tple[1]/self.tple[2]
     
     @property
