@@ -28,11 +28,18 @@ setup(
 )
 
 
+def prepare_reports_dir():
+    r = path("buildreports")
+    if not r.exists():
+        r.mkdir()
+
 
 @task
 def test():
+    prepare_reports_dir()
     sh('nosetests tests/ --with-xunit --xunit-file buildreports/nose-report.xml')
 
 @task
 def lint():
-   sh('pylint cassandrabench -f html >> buildreports/lint.html')
+    prepare_reports_dir()
+    sh('pylint cassandrabench -f html >> buildreports/lint.html')
