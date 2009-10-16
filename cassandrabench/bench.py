@@ -16,8 +16,8 @@ from hashlib import md5
 import time
 
 
-keybase = 1
-#need to make this configurable. Jonathan's default was 1000**2
+#TODO: Make this configurable
+keybase = 500
 TOTAL_KEYS = keybase**2
 
 COLUMNS_PER_KEY = 5
@@ -62,7 +62,7 @@ class Inserter(Thread):
         starttime = time.time()
         for i in self.range:
             key = str(i)
-            client.batch_insert('Keyspace1', key, cfmap, ConsistencyLevel.ONE)  
+            client.batch_insert('Keyspace1', key, cfmap, ConsistencyLevel.ONE)
             self.count += 1
         endtime = time.time()
         timeelapsed = endtime - starttime
@@ -113,13 +113,13 @@ def read(ip, port,threadcount):
     
 def benchme(threadcount,server):
     host = (server.split(":"))
+    print 'Running inserts against %s with %d threads' % (server, threadcount)
     insertdetails = insert(host[0], int(host[1]), threadcount)
+    print 'Running reads against %s with %d threads' % (server, threadcount)
     readdetails = read(host[0], int(host[1]),threadcount)
     return insertdetails + readdetails
-    #return insertdetails
     
     
-
 def run(hosts, threads, savehtml, outputname):
     reports = []
     for host in hosts:
