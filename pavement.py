@@ -36,10 +36,12 @@ def prepare_reports_dir():
 
 @task
 def test():
+    """run cassandra-bench unit tests using nose"""
     prepare_reports_dir()
     sh('nosetests tests/ --with-xunit --xunit-file buildreports/nose-report.xml')
 
 @task
 def lint():
+    """run pylint against the cassandra-bench source"""
     prepare_reports_dir()
     sh('pylint cassandrabench -f html >> buildreports/lint.html')
