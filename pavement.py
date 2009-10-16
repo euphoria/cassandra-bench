@@ -1,6 +1,5 @@
 from paver.easy import *
 from paver.setuputils import setup, find_packages
-from pylint import lint as linter 
 
 setup(
     name='cassandra-bench',
