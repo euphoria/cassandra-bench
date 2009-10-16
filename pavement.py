@@ -10,7 +10,6 @@ setup(
     url='http://github.com/rssvihla/cassandra-bench',
     download_url='http://github.com/rssvihla/cassandra-bench/downloads',
     packages=find_packages(),
-    
     long_description="""\
         """,
     classifiers=[
@@ -21,10 +20,10 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Operating System :: OS Independent"
     ],
-    keywords = "benchmarking, cassandra",
+    keywords="benchmarking, cassandra",
     license="Apache License 2.0",
     install_requires=[
-    'setuptools'
+        'setuptools'
     ],
 )
 
@@ -33,7 +32,7 @@ setup(
 @task
 def test():
     sh('nosetests tests/ --with-xunit --xunit-file buildreports/nose-report.xml')
-    
+
 @task
 def lint():
    sh('pylint cassandrabench -f html >> buildreports/lint.html')
